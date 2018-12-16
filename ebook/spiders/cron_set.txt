@@ -1,0 +1,1 @@
+49 15 * * *  bash /home/ec2-user/ebook_free/ebook/spiders/exe.sh > /tmp/ebook_free.log 2>&1
