@@ -6,10 +6,10 @@ from ebook.items import EbookItem
 from ebook.template import getElement, writeElement, createCsv, getPageNum
 import pandas as pd
 
-class EbookFreeBoySpider(CrawlSpider):
-    name = 'ebook_free_boy'
+class EbookFullBoySpider(CrawlSpider):
+    name = 'ebook_full_boy'
     allowed_domains = ['www.ebookjapan.jp']
-    start_urls = ['https://www.ebookjapan.jp/ebj/free/keyword-books/?uniGenres=10%2C11&genreLabel=人気の無料少年・青年まんが&sort=1']
+    start_urls = ['https://www.ebookjapan.jp/ebj/tag_genre/smallgenre2000/']
 
     def __init__(self):
         self.count = 0
@@ -21,10 +21,10 @@ class EbookFreeBoySpider(CrawlSpider):
 
         total_links = []
         for i in range(page_num):
-            page_links = response.xpath("//p[@class='itemThumb']/a/@href").extract()
+            page_links =  response.xpath("//li[@class='itemList']//a[@class = 'itemThumb ']/@href").extract()
             total_links.extend(page_links)
-            target_link = "https://www.ebookjapan.jp/ebj/free/keyword-books/page{0}/?uniGenres=10%2C11&genreLabel=人気の無料少年・青年まんが&sort=1".format(i+1)
-            # if i == 2:
+            target_link = "https://www.ebookjapan.jp/ebj/tag_genre/smallgenre2000/page{0}/".format(i+1)
+            # if i == 1:
             #     break
             yield scrapy.Request(response.urljoin(target_link))
 
@@ -34,5 +34,5 @@ class EbookFreeBoySpider(CrawlSpider):
     def parse_element(self, response):
         item = getElement(response)
         writeElement(self, item)
-        createCsv(self, 'free', 'boy')
+        createCsv(self, 'full', 'boy')
         self.count += 1
